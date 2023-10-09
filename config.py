@@ -1,5 +1,6 @@
 
 PROJECT_ID = ""
+SHOULD_TRANSLATE = False
 
 # Telegram
 API_ID = ""
