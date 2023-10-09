@@ -1,2 +1,4 @@
-/files/
-/config.py
+/files/*
+venv
+*.session
+*.session-journal
