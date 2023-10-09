@@ -23,7 +23,7 @@ def get_message_content_send(translated_message, channel_name, sender_name, is_m
     message += f"{channel_name} ({sender_name})\n"
     message += f"{translated_message}\n"
     if is_media_file:
-        message += f"[file size {file_size:.2f} MB, file hash {file_hash}]\n"
+        message += f"\n[file size {file_size:.2f} MB, file hash {file_hash}]\n"
     message += "-----------------------"
     return message
 
