@@ -1,0 +1,2 @@
+telethon
+google-cloud-translate
