@@ -4,6 +4,10 @@ import config
 from telethon import TelegramClient, events, utils
 import translateAPI
 
+client = TelegramClient('test2', config.API_ID, config.API_HASH).start()
+with open('groups.json', 'r') as openfile:
+    groups = json.load(openfile)
+
 @client.on(events.NewMessage)
 async def handler(event):
     sender = await event.get_sender()
@@ -18,7 +22,7 @@ async def handler(event):
             translated_text = ""
         if event.photo:
             path = await event.download_media(file="files")
-            await client.send_file(config.CHANNEL_ID, path, caption=config.MONITOR_CHANNEL_ID[chat_id] + ": " + translated_text, link_preview=False)
+            await client.send_file(config.CHANNEL_ID, path, caption=groups[chat_id] + ": " + translated_text, link_preview=False)
             try:
                 await os.remove(path)
             except Exception as e:
@@ -26,7 +30,7 @@ async def handler(event):
         elif event.file:
             path = await event.download_media(file="files")
             try:
-                await client.send_file(config.CHANNEL_ID, path, caption=config.MONITOR_CHANNEL_ID[chat_id] + ": " + translated_text, link_preview=False)
+                await client.send_file(config.CHANNEL_ID, path, caption=groups[chat_id] + ": " + translated_text, link_preview=False)
             except:
                 pass
             try:
@@ -34,12 +38,9 @@ async def handler(event):
             except Exception as e:
                 print("video: " + str(e))
         else:
-            await client.send_message(config.CHANNEL_ID, config.MONITOR_CHANNEL_ID[chat_id] + ": " + translated_text , link_preview=False)
+            await client.send_message(config.CHANNEL_ID, groups[chat_id] + ": " + translated_text , link_preview=False)
 try:
     print('(Press Ctrl+C to stop this)')
-    client = TelegramClient('test2', config.API_ID, config.API_HASH).start()
-    with open('groups.json', 'r') as openfile:
-        groups = json.load(openfile)
     client.run_until_disconnected()
 finally:
     client.disconnect()
