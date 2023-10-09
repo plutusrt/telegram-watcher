@@ -1,4 +1,3 @@
-
 PROJECT_ID = ""
 SHOULD_TRANSLATE = False
 

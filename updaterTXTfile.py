@@ -12,7 +12,7 @@ client = TelegramClient(config.TELEGRAM_SESSION_NAME, config.API_ID, config.API_
 FILE_HASHES = []
 with open('media_hashes.txt', 'r') as f:
     FILE_HASHES = f.readlines()
-file_hashes = open('media_hashes.txt', 'a')
+    print(f"[-] Loaded {len(FILE_HASHES)} media hashes")
 
 # Groups to monitor
 with open('groups.json', 'r') as openfile:
@@ -23,7 +23,7 @@ def get_message_content_send(translated_message, channel_name, sender_name, is_m
     message += f"{channel_name} ({sender_name})\n"
     message += f"{translated_message}\n"
     if is_media_file:
-        message += f"[file size {file_size:.2f} MB, file hash {file_hash}]\n"
+        message += f"\n[file size {file_size:.2f} MB, file hash {file_hash}]\n"
     message += "-----------------------"
     return message
 
@@ -93,7 +93,8 @@ async def handler(event):
             # Send only if it's new media
             if file_hash not in FILE_HASHES:
                 FILE_HASHES.append(file_hash)
-                file_hashes.write(file_hash+"\n")
+                with open('media_hashes.txt', 'a') as f:
+                    f.write(file_hash+"\n")
                 await client.send_file(config.CHANNEL_ID, file_path, caption=message_to_send, link_preview=False)
             try:
                 os.remove(file_path)
@@ -109,5 +110,4 @@ try:
     print('(Press Ctrl+C to stop this)')
     client.run_until_disconnected()
 finally:
-    file_hashes.close()
     client.disconnect()
