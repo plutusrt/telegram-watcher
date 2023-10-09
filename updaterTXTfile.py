@@ -18,7 +18,7 @@ def get_message_content_send(translated_message, channel_name, sender_name, is_f
     message += f"{channel_name} ({sender_name})\n"
     message += f"{translated_message}\n"
     if is_file:
-        message += f"File: size {file_size:.2f}, hash {file_hash}\n"
+        message += f"File: size {file_size:.2f} MB, hash {file_hash}\n"
     message += "-----------------------"
     return message
 
@@ -74,13 +74,14 @@ async def handler(event):
             print(f"[-] Sending message from {groups[chat_id]} ({sender_name}). With file hash: {file_hash}.")
 
             # Send only if it's new media
-            if not (file_hash in FILE_HASHES):
+            if file_hash not in FILE_HASHES:
+                FILE_HASHES.append(file_hash)
                 await client.send_file(config.CHANNEL_ID, file_path, caption=message_to_send, link_preview=False)
             try:
                 os.remove(file_path)
             except Exception as e:
                 print("[X] Error removing file with path: {path}. Error is: {e}")
-            FILE_HASHES.append(file_hash)
+
         else:
             print(f"[-] Sending message from {groups[chat_id]} ({sender_name}).")
             # First check we are allowed to send messages without files
