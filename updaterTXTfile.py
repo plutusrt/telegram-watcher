@@ -11,7 +11,7 @@ client = TelegramClient(config.TELEGRAM_SESSION_NAME, config.API_ID, config.API_
 # Media hashes
 FILE_HASHES = []
 with open('media_hashes.txt', 'r') as f:
-    FILE_HASHES = f.readlines()
+    FILE_HASHES = f.read().splitlines()
     print(f"[-] Loaded {len(FILE_HASHES)} media hashes")
 
 # Groups to monitor
